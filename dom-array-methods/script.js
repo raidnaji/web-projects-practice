@@ -1,9 +1,10 @@
 const main = document.getElementById('main');
 const addUserBtn = document.getElementById('add-user');
 const doubleBtn = document.getElementById('double');
-const showMillionairesBtn = document.getElementById('show-millionnaires');
+const showMillionairesBtn = document.getElementById('show-millionaires');
 const sortBtn = document.getElementById('sort');
 const calculateWealthBtn = document.getElementById('calculate-wealth');
+
 
 let data = [];
 let apiObj = {};
@@ -56,6 +57,29 @@ function sortByRichest() {
     updateDOM();
 }
 
+// Filter only millionnairs
+
+function showMillionaires() {
+    console.log(data);
+
+    data = data.filter(user => {
+        return user.money > 1000000
+    });
+    
+    console.log(data);
+
+    updateDOM();
+}
+
+// Calculate the total wealth
+function calculateWealth() {
+    const wealth = data.reduce((accumulator, user) => accumulator + user.money, 0);
+
+    const wealthEl = document.createElement('div');
+    wealthEl.innerHTML = `<h3>Total Wealth: <strong>${formatMoney(wealth)}</strong></h3>`;
+    main.appendChild(wealthEl);
+}
+
 
 //Add new obj to data arr
 function addData(obj) {
@@ -95,13 +119,15 @@ function formatMoney(number) {
 addUserBtn.addEventListener('click', getRandomUser);
 doubleBtn.addEventListener('click', doubleMoney);
 sortBtn.addEventListener('click', sortByRichest);
+showMillionairesBtn.addEventListener('click', showMillionaires);
+calculateWealthBtn.addEventListener('click', calculateWealth)
 
 
 
 document.addEventListener("click", someListener);
 
 function someListener(event) {
-    var element = event.target;
+    let element = event.target;
 
     if (element.tagName === 'DIV' && element.classList.contains("customer")) {
         console.log(event);
@@ -115,7 +141,7 @@ function someListener(event) {
         const selectedCustomer = element.textContent;
 
 
-        var newData = data.filter(function (entry) {
+        let newData = data.filter(function (entry) {
             return entry.name === selectedCustomer;
         });
 
